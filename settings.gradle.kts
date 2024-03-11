@@ -15,3 +15,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "DayForge"
 include(":app")
+include(":mylibrary")
+include(":domain")
+include(":data-local")
+include(":data-repository")
