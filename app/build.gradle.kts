@@ -1,6 +1,8 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.kotlinAndroid)
+    kotlin("kapt")
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -30,11 +32,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_18
+        targetCompatibility = JavaVersion.VERSION_18
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "18"
     }
     buildFeatures {
         compose = true
@@ -73,6 +75,9 @@ dependencies {
             .preview,
     )
     implementation(libs.compose.material3)
+    implementation(libs.androidx.navigation.compose)
+    implementation(project(":domain"))
+    implementation(project(":data-repository"))
 
     // Test
     testImplementation(libs.junit)
@@ -102,4 +107,17 @@ dependencies {
             .test
             .manifest,
     )
+
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+
+    implementation(
+        libs
+            .androidx
+            .hilt
+            .navigation
+            .compose,
+    )
+
+    implementation(libs.androidx.core.splashscreen)
 }
