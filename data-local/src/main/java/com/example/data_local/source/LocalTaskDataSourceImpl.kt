@@ -6,7 +6,7 @@ import com.example.data_local.toTaskEntity
 import com.example.data_repository.data_source.local.LocalTaskDataSource
 import com.example.domain.model.Task
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class LocalTaskDataSourceImpl
@@ -26,15 +26,13 @@ constructor(
         taskDao.updateTask(task.toTaskEntity())
     }
 
-    override fun getAllTasks(): Flow<List<Task>> = flow { taskDao.getAll().map { it.toTask() } }
+    override fun getAllTasks(): Flow<List<Task>> =
+        taskDao.getAll().map { tasks -> tasks.map { it.toTask() } }
+
+    override fun getTask(id: Long): Flow<Task> = taskDao.getTask(id).map { it.toTask() }
 
     override fun getTasksByCategory(categoryId: Long): Flow<List<Task>> =
-        flow {
-            taskDao
-                .getTasksByCategory(
-                    categoryId,
-                ).map { it.toTask() }
-        }
+        taskDao.getTasksByCategory(categoryId).map { tasks -> tasks.map { it.toTask() } }
 
     override fun getTodayTasks(): Flow<List<Task>> {
         TODO("Not yet implemented")

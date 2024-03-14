@@ -13,6 +13,8 @@ interface TaskRepository {
 
     fun getAllTasks(): Flow<List<Task>>
 
+    fun getTask(id: Long): Flow<Task>
+
     fun getTasksByCategory(categoryId: Long): Flow<List<Task>>
 
     fun getTodayTasks(): Flow<List<Task>>

@@ -5,27 +5,31 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
 @Dao
 interface TaskDao {
     @Insert
-    fun insertTask(task: TaskEntity)
+    suspend fun insertTask(task: TaskEntity)
 
     @Delete
-    fun deleteTask(task: TaskEntity)
+    suspend fun deleteTask(task: TaskEntity)
 
     @Update
-    fun updateTask(task: TaskEntity)
+    suspend fun updateTask(task: TaskEntity)
 
     @Query("SELECT * FROM tasks")
-    fun getAll(): List<TaskEntity>
+    fun getAll(): Flow<List<TaskEntity>>
 
     @Query("SELECT * FROM tasks WHERE category_id = :categoryId")
-    fun getTasksByCategory(categoryId: Long): List<TaskEntity>
+    fun getTasksByCategory(categoryId: Long): Flow<List<TaskEntity>>
+
+    @Query("SELECT * FROM tasks WHERE id = :id")
+    fun getTask(id: Long): Flow<TaskEntity>
 
     @Query("SELECT * FROM tasks WHERE  start_date =:today")
-    fun getTodayTasks(today: LocalDate = LocalDate.now()): List<TaskEntity>
+    fun getTodayTasks(today: LocalDate = LocalDate.now()): Flow<List<TaskEntity>>
 
     @Query("SELECT * FROM tasks WHERE start_date = :tomorrow")
     fun getTomorrowTasks(tomorrow: LocalDate = LocalDate.now().plusDays(1))

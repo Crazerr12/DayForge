@@ -6,7 +6,7 @@ import com.example.data_local.toCategoryEntity
 import com.example.data_repository.data_source.local.LocalCategoryDataSource
 import com.example.domain.model.Category
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class LocalCategoryDataSourceImpl
@@ -23,5 +23,7 @@ constructor(
     }
 
     override fun getAll(): Flow<List<Category>> =
-        flow { categoryDao.getAll().map { it.toCategory() } }
+        categoryDao.getAll().map { categories ->
+            categories.map { it.toCategory() }
+        }
 }

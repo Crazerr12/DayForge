@@ -24,6 +24,10 @@ class TaskRepositoryImpl(
         return localTaskDataSource.getAllTasks()
     }
 
+    override fun getTask(id: Long): Flow<Task> {
+        return localTaskDataSource.getTask(id)
+    }
+
     override fun getTasksByCategory(categoryId: Long): Flow<List<Task>> {
         return localTaskDataSource.getTasksByCategory(categoryId = categoryId)
     }
