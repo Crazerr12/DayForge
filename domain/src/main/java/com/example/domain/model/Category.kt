@@ -1,6 +1,6 @@
 package com.example.domain.model
 
 data class Category(
-    val id: Long,
-    val category: String,
+    val id: Long = 0,
+    val value: String,
 )

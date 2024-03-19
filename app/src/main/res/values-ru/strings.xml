@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DayForge</string>
+    <string name="complete">Выполненые</string>
+    <string name="today">Сегодня</string>
+    <string name="tasks">Задачи</string>
+    <string name="settings">Настройки</string>
+    <string name="bottom_navigation_item">нижний элемент навигации</string>
+    <string name="add_new_task">добавить новую задачу</string>
+    <string name="task_name_hint">Название</string>
+    <string name="task_description_hint">Описание</string>
+    <string name="priority">Приоритет</string>
+    <string name="subtasks">Подзадачи</string>
+    <string name="add_subtask">добавить подзадачу</string>
+    <string name="create_task">Создать задачу</string>
+    <string name="tomorrow_tab">Завтра</string>
+    <string name="next_week_tab">На следующей неделе</string>
+    <string name="this_week_tab">На этой неделе</string>
+</resources>

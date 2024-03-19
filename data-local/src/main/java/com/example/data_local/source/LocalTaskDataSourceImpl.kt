@@ -3,15 +3,15 @@ package com.example.data_local.source
 import com.example.data_local.db.task.TaskDao
 import com.example.data_local.toTask
 import com.example.data_local.toTaskEntity
+import com.example.data_local.utils.Converters
 import com.example.data_repository.data_source.local.LocalTaskDataSource
 import com.example.domain.model.Task
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.time.LocalDate
 import javax.inject.Inject
 
-class LocalTaskDataSourceImpl
-@Inject
-constructor(
+class LocalTaskDataSourceImpl @Inject constructor(
     private val taskDao: TaskDao,
 ) : LocalTaskDataSource {
     override suspend fun addTask(task: Task) {
@@ -35,6 +35,7 @@ constructor(
         taskDao.getTasksByCategory(categoryId).map { tasks -> tasks.map { it.toTask() } }
 
     override fun getTodayTasks(): Flow<List<Task>> {
-        TODO("Not yet implemented")
+        val todayMillis = Converters().toLocalDate(LocalDate.now())
+        return taskDao.getTodayTasks(todayMillis).map { tasks -> tasks.map { it.toTask() } }
     }
 }

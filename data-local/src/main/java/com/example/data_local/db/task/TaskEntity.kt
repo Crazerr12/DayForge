@@ -7,6 +7,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.data_local.db.category.CategoryEntity
 import com.example.domain.model.Priority
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -25,10 +26,11 @@ import java.time.LocalTime
 data class TaskEntity(
     @PrimaryKey(autoGenerate = true) val id: Long,
     @ColumnInfo(name = "title") val title: String,
-    @ColumnInfo(name = "category_id") val categoryId: Long,
+    @ColumnInfo(name = "description") val description: String?,
+    @ColumnInfo(name = "category_id") val categoryId: Long?,
     @ColumnInfo(name = "start_date") val startDate: LocalDate?,
     @ColumnInfo(name = "time_to_complete") val timeToComplete: LocalTime?,
     @ColumnInfo(name = "execution_start") val executionStart: LocalTime?,
     @ColumnInfo(name = "priority") val priority: Priority?,
-    @ColumnInfo(name = "days") val days: List<String>?,
+    @ColumnInfo(name = "days") val days: List<DayOfWeek>?,
 )

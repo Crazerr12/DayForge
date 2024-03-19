@@ -9,9 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class LocalCategoryDataSourceImpl
-@Inject
-constructor(
+class LocalCategoryDataSourceImpl @Inject constructor(
     private val categoryDao: CategoryDao,
 ) : LocalCategoryDataSource {
     override suspend fun addCategory(category: Category) {

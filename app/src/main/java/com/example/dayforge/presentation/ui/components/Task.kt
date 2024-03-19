@@ -1,4 +1,4 @@
-package com.example.dayforge.presentation.ui.utils
+package com.example.dayforge.presentation.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -24,16 +24,17 @@ import java.time.LocalTime
 @Composable
 fun Task(
     title: String,
-    category: Category,
+    category: Category?,
     startDate: LocalDate?,
     timeToComplete: LocalTime?,
     timeStart: LocalTime?,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(5.dp),
-        onClick = { /*TODO*/ },
+        onClick = onClick,
     ) {
         Row(
             modifier =
@@ -64,7 +65,7 @@ fun Task(
                 }
 
                 Row {
-                    Text(text = category.category)
+                    category?.value?.let { Text(text = it) }
 
                     if (timeStart != null) {
                         Spacer(modifier = Modifier.width(10.dp))
@@ -88,6 +89,7 @@ private fun TaskPreviewWithoutTimes() {
         timeToComplete = null,
         timeStart = null,
         startDate = LocalDate.now(),
+        onClick = {},
     )
 }
 
@@ -100,6 +102,7 @@ private fun TaskPreviewWithTimeToComplete() {
         timeToComplete = LocalTime.now(),
         timeStart = null,
         startDate = LocalDate.now(),
+        onClick = {},
     )
 }
 
@@ -112,6 +115,7 @@ private fun TaskPreviewWithStartTime() {
         timeToComplete = null,
         timeStart = LocalTime.now(),
         startDate = LocalDate.now(),
+        onClick = {},
     )
 }
 
@@ -124,5 +128,6 @@ private fun TaskPreviewWithBothTimes() {
         timeToComplete = LocalTime.now(),
         timeStart = LocalTime.now(),
         startDate = LocalDate.now(),
+        onClick = {},
     )
 }

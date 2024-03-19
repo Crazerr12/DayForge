@@ -1,5 +1,6 @@
 package com.example.dayforge.presentation.navigation
 
+import NewTaskScreen
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -17,6 +18,7 @@ fun RootNavGraph(navController: NavHostController) {
         tasksNavGraph(navController)
         settingsNavGraph(navController)
         composable(route = "add_new_task") {
+            NewTaskScreen(createTask = { navController.navigateUp() })
         }
     }
 }

@@ -42,7 +42,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.10"
     }
     packaging {
         resources {
@@ -76,6 +76,7 @@ dependencies {
     )
     implementation(libs.compose.material3)
     implementation(libs.androidx.navigation.compose)
+    implementation(project(":data-local"))
     implementation(project(":domain"))
     implementation(project(":data-repository"))
 

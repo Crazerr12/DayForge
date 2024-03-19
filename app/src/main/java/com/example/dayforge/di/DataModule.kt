@@ -14,7 +14,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object DataModule {
+class DataModule {
     @Provides
     @Singleton
     fun provideTaskRepository(localTaskDataSource: LocalTaskDataSource): TaskRepository =

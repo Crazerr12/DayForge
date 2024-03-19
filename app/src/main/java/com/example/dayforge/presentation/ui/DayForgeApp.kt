@@ -41,6 +41,7 @@ fun DayForgeApp(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
+    val showFab = currentDestination?.route in bottomBarRoutes.minus(BottomBarItem.SETTINGS.route)
     val showBottomBar = currentDestination?.route in bottomBarRoutes
 
     Scaffold(
@@ -60,16 +61,18 @@ fun DayForgeApp(
         },
         floatingActionButtonPosition = FabPosition.End,
         floatingActionButton = {
-            FloatingActionButton(
-                shape = CircleShape,
-                onClick = {
-                    navController.navigate("add_new_task")
-                },
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.baseline_add_24),
-                    contentDescription = stringResource(R.string.add_new_task),
-                )
+            if (showFab) {
+                FloatingActionButton(
+                    shape = CircleShape,
+                    onClick = {
+                        navController.navigate("add_new_task")
+                    },
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.baseline_add_24),
+                        contentDescription = stringResource(R.string.add_new_task),
+                    )
+                }
             }
         },
     ) {

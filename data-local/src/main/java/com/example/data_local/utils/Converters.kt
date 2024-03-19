@@ -1,6 +1,9 @@
 package com.example.data_local.utils
 
 import androidx.room.TypeConverter
+import com.example.domain.model.Priority
+import com.google.gson.Gson
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.concurrent.TimeUnit
@@ -31,4 +34,22 @@ class Converters {
         val second = (seconds % 60).toInt()
         return LocalTime.of(hour, minute, second)
     }
+
+    @TypeConverter
+    fun toPriority(value: String?) = value?.let { Priority.entries.find { it.value == value } }
+
+    @TypeConverter
+    fun fromPriority(value: Priority?) = value?.value
+
+    @TypeConverter
+    fun toDayOfWeek(value: String?) = value?.let { enumValueOf<DayOfWeek>(it) }
+
+    @TypeConverter
+    fun fromDayOfWeek(value: DayOfWeek?) = value?.value
+
+    @TypeConverter
+    fun listToJson(value: List<DayOfWeek>?): String = Gson().toJson(value)
+
+    @TypeConverter
+    fun toList(value: String?) = Gson().fromJson(value, Array<DayOfWeek>::class.java).toList()
 }

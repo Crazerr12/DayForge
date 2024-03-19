@@ -33,6 +33,6 @@ class TaskRepositoryImpl(
     }
 
     override fun getTodayTasks(): Flow<List<Task>> {
-        TODO("Not yet implemented")
+        return localTaskDataSource.getTodayTasks()
     }
 }

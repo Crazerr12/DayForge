@@ -9,6 +9,7 @@ internal fun TaskEntity.toTask(): Task =
     Task(
         id = id,
         title = title,
+        description = description,
         startDate = startDate,
         timeToComplete = timeToComplete,
         executionStart = executionStart,
@@ -21,6 +22,7 @@ internal fun Task.toTaskEntity(): TaskEntity =
     TaskEntity(
         id = id,
         title = title,
+        description = description,
         startDate = startDate,
         timeToComplete = timeToComplete,
         executionStart = executionStart,
@@ -29,6 +31,6 @@ internal fun Task.toTaskEntity(): TaskEntity =
         categoryId = categoryId,
     )
 
-internal fun Category.toCategoryEntity(): CategoryEntity = CategoryEntity(id, category)
+internal fun Category.toCategoryEntity(): CategoryEntity = CategoryEntity(id, value)
 
 internal fun CategoryEntity.toCategory(): Category = Category(id, category)
