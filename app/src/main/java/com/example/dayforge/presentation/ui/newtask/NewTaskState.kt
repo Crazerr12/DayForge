@@ -24,6 +24,7 @@ data class NewTaskState(
     val timeToComplete: LocalTime? = null,
     val dateDialogIsOpen: Boolean = false,
     val timeDialogIsOpen: Boolean = false,
+    val isComplete: Boolean = false,
     override val loading: Boolean = false,
     override val error: Boolean = false,
 ) : UiState

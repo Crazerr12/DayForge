@@ -33,4 +33,5 @@ data class TaskEntity(
     @ColumnInfo(name = "execution_start") val executionStart: LocalTime?,
     @ColumnInfo(name = "priority") val priority: Priority?,
     @ColumnInfo(name = "days") val days: List<DayOfWeek>?,
+    @ColumnInfo(name = "is_complete", defaultValue = "false") val isComplete: Boolean,
 )

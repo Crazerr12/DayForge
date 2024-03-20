@@ -3,7 +3,6 @@ package com.example.dayforge.presentation.ui.newtask
 import androidx.lifecycle.viewModelScope
 import com.example.dayforge.presentation.base.MviViewModel
 import com.example.dayforge.presentation.models.Subtask
-import com.example.dayforge.presentation.models.UiState
 import com.example.domain.model.Category
 import com.example.domain.model.Priority
 import com.example.domain.model.Task
@@ -20,13 +19,11 @@ class NewTaskViewModel @Inject constructor(
     private val addTaskUseCase: AddTaskUseCase,
     private val getAllCategoriesUseCase: GetAllCategoriesUseCase,
     private val addCategoryUseCase: AddCategoryUseCase,
-) : MviViewModel<NewTaskState, UiState<NewTaskState>, NewTaskUiAction>(NewTaskState()) {
+) : MviViewModel<NewTaskState, NewTaskUiAction>(NewTaskState()) {
 
     init {
         onLoadCategories()
     }
-
-    override fun initState(): UiState<NewTaskState> = UiState.Success(NewTaskState())
 
     override fun handleAction(action: NewTaskUiAction) {
         when (action) {
@@ -47,59 +44,52 @@ class NewTaskViewModel @Inject constructor(
             // TimeDates
             is NewTaskUiAction.SetDate -> onSetDate(action.date)
             is NewTaskUiAction.SetTime -> onSetTime(action.time)
+            is NewTaskUiAction.IncompleteCompleteTask -> onCompleteTask(action.isComplete)
         }
     }
 
     private fun onUpdateName(name: String) {
-        submitState(state = UiState.Success(uiState.value.getSuccessData().copy(name = name)))
+        reduceState { it.copy(name = name) }
     }
 
     private fun onUpdateDescription(description: String) {
-        submitState(
-            state = UiState.Success(
-                uiState.value.getSuccessData().copy(description = description)
-            )
-        )
+        reduceState { it.copy(description = description) }
     }
 
     private fun onAddSubtask() {
-        uiState.value.getSuccessData().subtasks.add(Subtask())
+        uiState.value.subtasks.add(Subtask())
     }
 
     private fun onUpdateSubtask(subtask: Subtask, index: Int) {
-        uiState.value.getSuccessData().subtasks[index] = subtask
+        uiState.value.subtasks[index] = subtask
     }
 
     private fun onChooseCategory(category: Category) {
-        submitState(
-            state = UiState.Success(
-                uiState.value.getSuccessData().copy(
-                    category = category,
-                    categoryDropDownIsExpanded = category.id.toInt() == 0
-                )
+        reduceState {
+            it.copy(
+                category = category,
+                categoryDropDownIsExpanded = category.id.toInt() == 0
             )
-        )
+        }
     }
 
     private fun onSetPriority(priority: Priority) {
-        submitState(
-            state = UiState.Success(
-                uiState.value.getSuccessData().copy(
-                    priority = priority,
-                    priorityDropDownIsExpanded = false
-                )
+        reduceState {
+            it.copy(
+                priority = priority,
+                priorityDropDownIsExpanded = false
             )
-        )
+        }
     }
 
     private fun onCreateTask() {
         viewModelScope.launch {
-            val state = uiState.value.getSuccessData()
+            val state = uiState.value
 
             if (state.category?.id?.toInt() == 0) {
                 addCategoryUseCase.execute(state.category)
                 val category = state.category.copy(id = state.categories.size.toLong())
-                submitState(state = UiState.Success(state.copy(category = category)))
+                reduceState { it.copy(category = category) }
             }
 
             addTaskUseCase.execute(
@@ -112,64 +102,46 @@ class NewTaskViewModel @Inject constructor(
                     priority = state.priority,
                     days = state.days,
                     categoryId = state.category?.id,
+                    isComplete = state.isComplete
                 )
             )
         }
     }
 
     private fun onExpandedDropdownMenu(isExpanded: Boolean) {
-        submitState(
-            state = UiState.Success(
-                uiState.value.getSuccessData().copy(categoryDropDownIsExpanded = isExpanded)
-            )
-        )
+        reduceState { it.copy(categoryDropDownIsExpanded = isExpanded) }
     }
 
     private fun onExpandedPriorityDropdownMenu(isExpanded: Boolean) {
-        submitState(
-            state = UiState.Success(
-                uiState.value.getSuccessData().copy(priorityDropDownIsExpanded = isExpanded)
-            )
-        )
+        reduceState { it.copy(priorityDropDownIsExpanded = isExpanded) }
     }
 
     private fun onLoadCategories() {
+        reduceState { it.copy(loading = true) }
         viewModelScope.launch {
-            getAllCategoriesUseCase.execute().collect {
-                submitState(
-                    state = UiState.Success(
-                        uiState.value.getSuccessData().copy(categories = it)
-                    )
-                )
+            getAllCategoriesUseCase.execute().collect { categories ->
+                reduceState { it.copy(categories = categories, loading = false) }
             }
         }
     }
 
     private fun onOpenDateDialog(isOpen: Boolean) {
-        submitState(
-            state = UiState.Success(
-                uiState.value.getSuccessData().copy(dateDialogIsOpen = !isOpen)
-            )
-        )
+        reduceState { it.copy(dateDialogIsOpen = !isOpen) }
     }
 
     private fun onOpenTimeDialog(isOpen: Boolean) {
-        submitState(
-            state = UiState.Success(
-                uiState.value.getSuccessData().copy(timeDialogIsOpen = !isOpen)
-            )
-        )
+        reduceState { it.copy(timeDialogIsOpen = !isOpen) }
     }
 
     private fun onSetDate(date: LocalDateTime) {
-        submitState(
-            state = UiState.Success(
-                uiState.value.getSuccessData().copy(startDate = date, dateDialogIsOpen = false)
-            )
-        )
+        reduceState { it.copy(startDate = date, dateDialogIsOpen = false) }
     }
 
     private fun onSetTime(time: LocalDateTime) {
 
+    }
+
+    private fun onCompleteTask(isComplete: Boolean) {
+        reduceState { it.copy(isComplete = !isComplete) }
     }
 }

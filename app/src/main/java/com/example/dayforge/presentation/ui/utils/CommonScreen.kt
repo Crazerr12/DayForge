@@ -12,22 +12,16 @@ import androidx.compose.ui.Modifier
 import com.example.dayforge.presentation.models.UiState
 
 @Composable
-fun <T : Any> CommonScreen(
-    state: UiState<T>,
+fun <T : UiState> CommonScreen(
+    state: UiState,
     onSuccess: @Composable (T) -> Unit,
 ) {
-    when (state) {
-        is UiState.Loading -> {
-            Loading()
-        }
-
-        is UiState.Success -> {
-            onSuccess(state.data)
-        }
-
-        is UiState.Error -> {
-            Error(state.errorMessage)
-        }
+    if (state.loading) {
+        Loading()
+    } else if (state.error) {
+        Error("")
+    } else {
+        onSuccess(state as T)
     }
 }
 

@@ -14,4 +14,5 @@ data class Task(
     val priority: Priority?,
     val days: List<DayOfWeek>?,
     val categoryId: Long?,
+    val isComplete: Boolean,
 )

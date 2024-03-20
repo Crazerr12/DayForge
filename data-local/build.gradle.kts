@@ -4,11 +4,16 @@ plugins {
     alias(libs.plugins.ksp)
     kotlin("kapt")
     alias(libs.plugins.hilt)
+    alias(libs.plugins.room)
 }
 
 android {
     namespace = "com.example.data_local"
     compileSdk = 34
+
+    room {
+        schemaDirectory("$projectDir/schemas")
+    }
 
     defaultConfig {
         minSdk = 29

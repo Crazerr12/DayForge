@@ -34,7 +34,7 @@ fun TodayScreen(
     vm: TodayViewModel = hiltViewModel(),
 ) {
     vm.uiState.collectAsState().value.let { state ->
-        CommonScreen(state = state) { todayState ->
+        CommonScreen<TodayState>(state = state) { todayState ->
             TodayContent(
                 onTaskClick = onTaskClick,
                 state = todayState,

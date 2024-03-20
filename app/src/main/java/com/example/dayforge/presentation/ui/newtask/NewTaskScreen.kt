@@ -53,7 +53,7 @@ fun NewTaskScreen(
     vm: NewTaskViewModel = hiltViewModel(),
 ) {
     vm.uiState.collectAsState().value.let { state ->
-        CommonScreen(state = state) { newTaskState ->
+        CommonScreen<NewTaskState>(state = state) { newTaskState ->
             NewTaskContent(
                 state = newTaskState,
                 handleAction = { vm.handleAction(it) },

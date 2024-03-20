@@ -2,7 +2,6 @@ package com.example.dayforge.presentation.ui.today
 
 import androidx.lifecycle.viewModelScope
 import com.example.dayforge.presentation.base.MviViewModel
-import com.example.dayforge.presentation.models.UiState
 import com.example.domain.usecase.GetAllCategoriesUseCase
 import com.example.domain.usecase.GetTodayTasksUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,13 +12,11 @@ import javax.inject.Inject
 class TodayViewModel @Inject constructor(
     private val getAllCategoriesUseCase: GetAllCategoriesUseCase,
     private val getTodayTasksUseCase: GetTodayTasksUseCase,
-) : MviViewModel<TodayState, UiState<TodayState>, TodayUiAction>(TodayState()) {
+) : MviViewModel<TodayState, TodayUiAction>(TodayState()) {
 
     init {
         onLoadCategories()
     }
-
-    override fun initState(): UiState<TodayState> = UiState.Loading
 
     override fun handleAction(action: TodayUiAction) {
         when (action) {
@@ -31,27 +28,19 @@ class TodayViewModel @Inject constructor(
     }
 
     private fun onLoadCategories() {
+        reduceState { it.copy(loading = true) }
         viewModelScope.launch {
             getAllCategoriesUseCase.execute().collect { categories ->
-                submitState(
-                    state = UiState.Success(
-                        TodayState(categories = categories)
-                    )
-                )
+                reduceState { it.copy(categories = categories, loading = false) }
             }
         }
     }
 
     private fun onLoadTodayTasks() {
+        reduceState { it.copy(loading = false) }
         viewModelScope.launch {
             getTodayTasksUseCase.execute().collect { todayTasks ->
-                submitState(
-                    state = UiState.Success(
-                        uiState.value.getSuccessData().copy(
-                            todayTasks = todayTasks,
-                        )
-                    )
-                )
+                reduceState { it.copy(todayTasks = todayTasks, loading = false) }
             }
         }
     }
@@ -63,10 +52,6 @@ class TodayViewModel @Inject constructor(
     }
 
     private fun onUpdateCurrentTab(index: Int) {
-        submitState(
-            state = UiState.Success(
-                uiState.value.getSuccessData().copy(selectedTabIndex = index)
-            )
-        )
+        reduceState { it.copy(selectedTabIndex = index) }
     }
 }
