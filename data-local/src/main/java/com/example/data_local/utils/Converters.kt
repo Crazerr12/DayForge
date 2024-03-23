@@ -2,6 +2,7 @@ package com.example.data_local.utils
 
 import androidx.room.TypeConverter
 import com.example.domain.model.Priority
+import com.example.domain.model.Subtask
 import com.google.gson.Gson
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -48,8 +49,16 @@ class Converters {
     fun fromDayOfWeek(value: DayOfWeek?) = value?.value
 
     @TypeConverter
-    fun listToJson(value: List<DayOfWeek>?): String = Gson().toJson(value)
+    fun fromSubtasks(value: List<Subtask>): String = Gson().toJson(value)
 
     @TypeConverter
-    fun toList(value: String?) = Gson().fromJson(value, Array<DayOfWeek>::class.java).toList()
+    fun toSubtasks(value: String?): List<Subtask> =
+        Gson().fromJson(value, Array<Subtask>::class.java).toList()
+
+    @TypeConverter
+    fun dayOfWeeksToJson(value: List<DayOfWeek>?): String = Gson().toJson(value)
+
+    @TypeConverter
+    fun dayOfWeeksToList(value: String?): List<DayOfWeek> =
+        Gson().fromJson(value, Array<DayOfWeek>::class.java).toList()
 }

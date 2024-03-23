@@ -19,4 +19,7 @@
     <string name="cancel">Cancel</string>
     <string name="done">Done</string>
     <string name="specify_the_time">Specify the time</string>
+    <string name="choose_a_time">Choose a time</string>
+    <string name="okay">Okay</string>
+    <string name="clock_hint">00</string>
 </resources>

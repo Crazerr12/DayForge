@@ -1,10 +1,10 @@
 package com.example.dayforge.presentation.ui.newtask
 
 import androidx.compose.runtime.mutableStateListOf
-import com.example.dayforge.presentation.models.Subtask
 import com.example.dayforge.presentation.models.UiState
 import com.example.domain.model.Category
 import com.example.domain.model.Priority
+import com.example.domain.model.Subtask
 import java.time.DayOfWeek
 import java.time.LocalDateTime
 import java.time.LocalTime

@@ -42,9 +42,6 @@ import com.example.dayforge.presentation.ui.newtask.NewTaskViewModel
 import com.example.dayforge.presentation.ui.utils.CommonScreen
 import com.example.domain.model.Category
 import com.example.domain.model.Priority
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
 
 @Composable
 fun NewTaskScreen(
@@ -74,11 +71,7 @@ fun NewTaskContent(
 ) {
     if (state.dateDialogIsOpen) {
         DateDialog(onDismiss = { handleAction(NewTaskUiAction.ShowHideDateDialog(state.timeDialogIsOpen)) }) {
-            val date = LocalDateTime.ofInstant(
-                it.selectedDateMillis?.let { it1 -> Instant.ofEpochMilli(it1) },
-                ZoneId.systemDefault()
-            )
-            handleAction(NewTaskUiAction.SetDate(date))
+            handleAction(NewTaskUiAction.SetDate(it))
         }
     }
 

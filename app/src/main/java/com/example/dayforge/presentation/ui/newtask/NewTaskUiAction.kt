@@ -1,9 +1,9 @@
 package com.example.dayforge.presentation.ui.newtask
 
-import com.example.dayforge.presentation.models.Subtask
 import com.example.dayforge.presentation.models.UiAction
 import com.example.domain.model.Category
 import com.example.domain.model.Priority
+import com.example.domain.model.Subtask
 import java.time.LocalDateTime
 
 sealed interface NewTaskUiAction : UiAction {
@@ -21,5 +21,5 @@ sealed interface NewTaskUiAction : UiAction {
     data class OpenTimeDialog(val isOpen: Boolean) : NewTaskUiAction
     data class SetDate(val date: LocalDateTime) : NewTaskUiAction
     data class SetTime(val time: LocalDateTime) : NewTaskUiAction
-    data class IncompleteCompleteTask(val isComplete: Boolean) : NewTaskUiAction
+    data class IncompleteCompleteTask(val task: Boolean) : NewTaskUiAction
 }

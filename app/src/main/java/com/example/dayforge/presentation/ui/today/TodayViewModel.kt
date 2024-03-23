@@ -24,6 +24,7 @@ class TodayViewModel @Inject constructor(
             is TodayUiAction.LoadTodayTasks -> onLoadTodayTasks()
             is TodayUiAction.LoadTomorrowTasks -> onLoadTomorrowTasks()
             is TodayUiAction.UpdateCurrentTab -> onUpdateCurrentTab(action.index)
+            is TodayUiAction.CompleteTask -> onCompleteTask(action.index)
         }
     }
 
@@ -53,5 +54,16 @@ class TodayViewModel @Inject constructor(
 
     private fun onUpdateCurrentTab(index: Int) {
         reduceState { it.copy(selectedTabIndex = index) }
+    }
+
+    private fun onCompleteTask(index: Int) {
+        val tasks = uiState.value.todayTasks.toMutableList()
+        val task = tasks[index]
+
+        tasks[index] = task.copy(
+            isComplete = !task.isComplete
+        )
+
+        reduceState { it.copy(todayTasks = tasks) }
     }
 }

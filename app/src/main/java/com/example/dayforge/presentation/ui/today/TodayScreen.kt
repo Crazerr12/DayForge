@@ -2,10 +2,13 @@ package com.example.dayforge.presentation.ui.today
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Tab
@@ -17,6 +20,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.dayforge.R
 import com.example.dayforge.presentation.models.TabItem
@@ -97,7 +101,7 @@ fun TodayContent(
         ) { index ->
             when (index) {
                 0 -> {
-                    if (state.todayTasks == null) {
+                    if (state.todayTasks.isEmpty()) {
                         handleAction(TodayUiAction.LoadTodayTasks)
                     }
 
@@ -105,11 +109,12 @@ fun TodayContent(
                         tasks = state.todayTasks,
                         categories = state.categories,
                         onTaskClick = onTaskClick,
+                        onCompleteTask = { handleAction(TodayUiAction.CompleteTask(it)) }
                     )
                 }
 
                 1 -> {
-                    if (state.tomorrowTasks == null) {
+                    if (state.tomorrowTasks.isEmpty()) {
                         handleAction(TodayUiAction.LoadTomorrowTasks)
                     }
 
@@ -117,6 +122,7 @@ fun TodayContent(
                         tasks = state.tomorrowTasks,
                         categories = state.categories,
                         onTaskClick = onTaskClick,
+                        onCompleteTask = {}
                     )
                 }
 
@@ -125,6 +131,7 @@ fun TodayContent(
                         tasks = state.nextWeekTasks,
                         categories = state.categories,
                         onTaskClick = onTaskClick,
+                        onCompleteTask = {}
                     )
                 }
             }
@@ -136,20 +143,29 @@ fun TodayContent(
 @Composable
 fun TaskPage(
     onTaskClick: () -> Unit,
+    onCompleteTask: (Int) -> Unit,
     tasks: List<Task>?,
     categories: List<Category>,
     modifier: Modifier = Modifier,
 ) {
 
     LazyColumn(modifier = modifier.fillMaxSize()) {
-        items(tasks ?: emptyList()) { task ->
+        itemsIndexed(tasks ?: emptyList()) { index: Int, task: Task ->
+
+            Spacer(modifier = Modifier.height(10.dp))
+
             Task(
                 title = task.title,
+                description = task.description,
+                isComplete = task.isComplete,
                 category = categories.firstOrNull { it.id == task.categoryId },
                 startDate = task.startDate,
                 timeToComplete = task.timeToComplete,
                 timeStart = null,
                 onClick = onTaskClick,
+                onCompleteClick = { onCompleteTask(index) },
+                subtasks = task.subtasks,
+                modifier = Modifier.padding(horizontal = 10.dp)
             )
         }
     }

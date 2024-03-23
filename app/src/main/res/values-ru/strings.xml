@@ -16,4 +16,11 @@
     <string name="tomorrow_tab">Завтра</string>
     <string name="next_week_tab">На следующей неделе</string>
     <string name="this_week_tab">На этой неделе</string>
+    <string name="period_of_execution">Время выполнения</string>
+    <string name="cancel">Отмена</string>
+    <string name="done">Выполнено</string>
+    <string name="specify_the_time">Укажите время</string>
+    <string name="choose_a_time">Выберите время</string>
+    <string name="okay">Окей</string>
+    <string name="clock_hint">00</string>
 </resources>

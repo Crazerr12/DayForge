@@ -7,6 +7,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.data_local.db.category.CategoryEntity
 import com.example.domain.model.Priority
+import com.example.domain.model.Subtask
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
@@ -34,4 +35,5 @@ data class TaskEntity(
     @ColumnInfo(name = "priority") val priority: Priority?,
     @ColumnInfo(name = "days") val days: List<DayOfWeek>?,
     @ColumnInfo(name = "is_complete", defaultValue = "false") val isComplete: Boolean,
+    @ColumnInfo(name = "subtasks") val subtasks: List<Subtask>?,
 )

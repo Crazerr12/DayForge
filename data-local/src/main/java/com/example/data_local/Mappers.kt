@@ -17,6 +17,7 @@ internal fun TaskEntity.toTask(): Task =
         days = days,
         categoryId = categoryId,
         isComplete = isComplete,
+        subtasks = subtasks
     )
 
 internal fun Task.toTaskEntity(): TaskEntity =
@@ -31,6 +32,7 @@ internal fun Task.toTaskEntity(): TaskEntity =
         days = days,
         categoryId = categoryId,
         isComplete = isComplete,
+        subtasks = subtasks
     )
 
 internal fun Category.toCategoryEntity(): CategoryEntity = CategoryEntity(id, value)

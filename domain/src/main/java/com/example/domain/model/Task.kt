@@ -15,4 +15,5 @@ data class Task(
     val days: List<DayOfWeek>?,
     val categoryId: Long?,
     val isComplete: Boolean,
+    val subtasks: List<Subtask>?,
 )

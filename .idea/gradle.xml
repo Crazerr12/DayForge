@@ -13,7 +13,6 @@
             <option value="$PROJECT_DIR$/data-local" />
             <option value="$PROJECT_DIR$/data-repository" />
             <option value="$PROJECT_DIR$/domain" />
-            <option value="$PROJECT_DIR$/mylibrary" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

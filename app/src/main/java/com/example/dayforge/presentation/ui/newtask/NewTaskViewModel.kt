@@ -2,9 +2,9 @@ package com.example.dayforge.presentation.ui.newtask
 
 import androidx.lifecycle.viewModelScope
 import com.example.dayforge.presentation.base.MviViewModel
-import com.example.dayforge.presentation.models.Subtask
 import com.example.domain.model.Category
 import com.example.domain.model.Priority
+import com.example.domain.model.Subtask
 import com.example.domain.model.Task
 import com.example.domain.usecase.AddCategoryUseCase
 import com.example.domain.usecase.AddTaskUseCase
@@ -44,7 +44,7 @@ class NewTaskViewModel @Inject constructor(
             // TimeDates
             is NewTaskUiAction.SetDate -> onSetDate(action.date)
             is NewTaskUiAction.SetTime -> onSetTime(action.time)
-            is NewTaskUiAction.IncompleteCompleteTask -> onCompleteTask(action.isComplete)
+            is NewTaskUiAction.IncompleteCompleteTask -> onCompleteTask(action.task)
         }
     }
 
@@ -57,7 +57,7 @@ class NewTaskViewModel @Inject constructor(
     }
 
     private fun onAddSubtask() {
-        uiState.value.subtasks.add(Subtask())
+        uiState.value.subtasks.add(Subtask(name = "", isComplete = false))
     }
 
     private fun onUpdateSubtask(subtask: Subtask, index: Int) {
@@ -102,7 +102,8 @@ class NewTaskViewModel @Inject constructor(
                     priority = state.priority,
                     days = state.days,
                     categoryId = state.category?.id,
-                    isComplete = state.isComplete
+                    isComplete = state.isComplete,
+                    subtasks = state.subtasks
                 )
             )
         }

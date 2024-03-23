@@ -120,5 +120,6 @@ dependencies {
             .compose,
     )
 
+    implementation(libs.textflow)
     implementation(libs.androidx.core.splashscreen)
 }

@@ -17,10 +17,8 @@ import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TimePicker
-import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,67 +31,74 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.dayforge.R
 import com.example.dayforge.presentation.ui.utils.toMillis
+import java.time.Instant
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneId
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateDialog(
     onDismiss: () -> Unit,
-    onConfirm: (DatePickerState) -> Unit,
+    onConfirm: (LocalDateTime) -> Unit,
 ) {
     var timeDialogIsOpen by remember {
         mutableStateOf(false)
     }
 
-    val dateTime = LocalDateTime.now()
+    val dateTime = LocalDate.now()
+    val localTime: MutableState<LocalTime?> = remember {
+        mutableStateOf(null)
+    }
 
     val datePickerState = remember {
         DatePickerState(
             locale = Locale.getDefault(),
             yearRange = 2023..2030,
-            initialSelectedDateMillis = dateTime.toMillis(),
+            initialSelectedDateMillis = dateTime.atStartOfDay().toMillis(),
             initialDisplayMode = DisplayMode.Picker,
             initialDisplayedMonthMillis = null,
         )
     }
 
     if (timeDialogIsOpen) {
-        TimePicker(state = rememberTimePickerState())
+        TimeDialog(onDismiss = { timeDialogIsOpen = false }, onConfirm = {
+            localTime.value = LocalTime.of(it.hour, it.minute)
+            timeDialogIsOpen = false
+        })
     }
 
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(
             usePlatformDefaultWidth = false
-        )
+        ),
     ) {
         Card(
             elevation = CardDefaults.cardElevation(5.dp),
             shape = RoundedCornerShape(15.dp),
             modifier = Modifier
-                .fillMaxWidth(0.8f)
+                .fillMaxWidth(0.9f)
                 .border(
                     width = 1.dp,
                     color = MaterialTheme.colorScheme.onSurface,
                     shape = RoundedCornerShape(15.dp)
-                )
+                ),
         ) {
-
 
             DatePicker(state = datePickerState)
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            TextField(
+            Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        timeDialogIsOpen = !timeDialogIsOpen
+                        timeDialogIsOpen = true
                     },
-                value = "",
-                onValueChange = {},
-                placeholder = { Hint(hint = R.string.specify_the_time) }
+                text = localTime.value.toString(),
             )
 
             Row(
@@ -104,7 +109,16 @@ fun DateDialog(
                     Text(text = stringResource(id = R.string.cancel))
                 }
 
-                Button(onClick = { onConfirm(datePickerState) }) {
+                Button(onClick = {
+                    val localDate = datePickerState.selectedDateMillis?.let {
+                        Instant.ofEpochMilli(
+                            it
+                        ).atZone(ZoneId.systemDefault()).toLocalDate()
+                    }
+                    val localDateTime =
+                        localTime.value?.atDate(localDate)
+                    onConfirm(localDateTime ?: localDate!!.atStartOfDay())
+                }) {
                     Text(text = stringResource(id = R.string.done))
                 }
             }
@@ -112,7 +126,6 @@ fun DateDialog(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 private fun DateDialogPreview() {
