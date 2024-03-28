@@ -8,6 +8,7 @@ import com.example.data_repository.data_source.local.LocalTaskDataSource
 import com.example.domain.model.Task
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.time.DayOfWeek
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -38,4 +39,25 @@ class LocalTaskDataSourceImpl @Inject constructor(
         val todayMillis = Converters().toLocalDate(LocalDate.now())
         return taskDao.getTodayTasks(todayMillis).map { tasks -> tasks.map { it.toTask() } }
     }
+
+    override fun getTomorrowTasks(): Flow<List<Task>> {
+        val tomorrowMillis = Converters().toLocalDate(LocalDate.now().plusDays(1))
+        return taskDao.getTomorrowTasks(tomorrowMillis).map { tasks -> tasks.map { it.toTask() } }
+    }
+
+    override fun getNextOrThisWeekTasks(): Flow<List<Task>> {
+        val today = LocalDate.now().dayOfWeek
+        val minMillis = Converters().toLocalDate(LocalDate.now().plusDays(2))
+
+        val maxMillis = if (today == DayOfWeek.SATURDAY) Converters().toLocalDate(
+            LocalDate.now().plusWeeks(1).with(DayOfWeek.SUNDAY)
+        )
+        else Converters().toLocalDate(LocalDate.now().with(DayOfWeek.SUNDAY))
+
+        return taskDao.getNextOrThisWeekTasks(minMillis, maxMillis)
+            .map { tasks -> tasks.map { it.toTask() } }
+    }
+
+    override fun getTasksByCompletionStatus(isComplete: Boolean): Flow<List<Task>> =
+        taskDao.getTasksByCompletionStatus(isComplete).map { tasks -> tasks.map { it.toTask() } }
 }

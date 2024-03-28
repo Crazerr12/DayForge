@@ -6,7 +6,6 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
-import java.time.LocalDate
 
 @Dao
 interface TaskDao {
@@ -32,5 +31,11 @@ interface TaskDao {
     fun getTodayTasks(today: Long?): Flow<List<TaskEntity>>
 
     @Query("SELECT * FROM tasks WHERE start_date = :tomorrow")
-    fun getTomorrowTasks(tomorrow: LocalDate = LocalDate.now().plusDays(1)): Flow<List<TaskEntity>>
+    fun getTomorrowTasks(tomorrow: Long?): Flow<List<TaskEntity>>
+
+    @Query("SELECT * FROM tasks WHERE start_date BETWEEN :minDate AND :maxDate")
+    fun getNextOrThisWeekTasks(minDate: Long?, maxDate: Long?): Flow<List<TaskEntity>>
+
+    @Query("SELECT * FROM tasks WHERE is_complete = :isComplete")
+    fun getTasksByCompletionStatus(isComplete: Boolean): Flow<List<TaskEntity>>
 }

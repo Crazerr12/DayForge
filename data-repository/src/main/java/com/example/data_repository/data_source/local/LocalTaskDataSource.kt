@@ -18,4 +18,10 @@ interface LocalTaskDataSource {
     fun getTasksByCategory(categoryId: Long): Flow<List<Task>>
 
     fun getTodayTasks(): Flow<List<Task>>
+
+    fun getTomorrowTasks(): Flow<List<Task>>
+
+    fun getNextOrThisWeekTasks(): Flow<List<Task>>
+
+    fun getTasksByCompletionStatus(isComplete: Boolean): Flow<List<Task>>
 }
