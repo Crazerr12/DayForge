@@ -8,8 +8,11 @@ import com.example.domain.usecase.DeleteCategoryUseCase
 import com.example.domain.usecase.DeleteTaskUseCase
 import com.example.domain.usecase.GetAllCategoriesUseCase
 import com.example.domain.usecase.GetAllTasksUseCase
+import com.example.domain.usecase.GetNextOrThisWeekTasksUseCase
 import com.example.domain.usecase.GetTasksByCategoryUseCase
+import com.example.domain.usecase.GetTasksByCompletionStatusUseCase
 import com.example.domain.usecase.GetTodayTasksUseCase
+import com.example.domain.usecase.GetTomorrowTasksUseCase
 import com.example.domain.usecase.UpdateTaskUseCase
 import dagger.Module
 import dagger.Provides
@@ -55,4 +58,16 @@ object DomainModule {
     @Provides
     fun provideGetTasksByCategoriesUseCase(taskRepository: TaskRepository): GetTasksByCategoryUseCase =
         GetTasksByCategoryUseCase(taskRepository = taskRepository)
+
+    @Provides
+    fun provideGetNextOrThisWeekTasksUseCase(taskRepository: TaskRepository): GetNextOrThisWeekTasksUseCase =
+        GetNextOrThisWeekTasksUseCase(taskRepository = taskRepository)
+
+    @Provides
+    fun provideGetTomorrowTasksUseCase(taskRepository: TaskRepository): GetTomorrowTasksUseCase =
+        GetTomorrowTasksUseCase(taskRepository = taskRepository)
+
+    @Provides
+    fun provideGetTasksByCompletionStatusUseCase(taskRepository: TaskRepository): GetTasksByCompletionStatusUseCase =
+        GetTasksByCompletionStatusUseCase(taskRepository = taskRepository)
 }
