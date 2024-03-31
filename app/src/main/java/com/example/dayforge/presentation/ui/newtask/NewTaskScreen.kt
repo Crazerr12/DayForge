@@ -42,6 +42,8 @@ import com.example.dayforge.presentation.ui.newtask.NewTaskViewModel
 import com.example.dayforge.presentation.ui.utils.CommonScreen
 import com.example.domain.model.Category
 import com.example.domain.model.Priority
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @Composable
 fun NewTaskScreen(
@@ -70,9 +72,17 @@ fun NewTaskContent(
     modifier: Modifier = Modifier,
 ) {
     if (state.dateDialogIsOpen) {
-        DateDialog(onDismiss = { handleAction(NewTaskUiAction.ShowHideDateDialog(state.timeDialogIsOpen)) }) {
-            handleAction(NewTaskUiAction.SetDate(it))
-        }
+        DateDialog(
+            onDismiss = { handleAction(NewTaskUiAction.ShowHideDateDialog(state.dateDialogIsOpen)) },
+            onConfirm = { date, time ->
+                handleAction(
+                    NewTaskUiAction.SetDate(
+                        date = date,
+                        time = time,
+                    )
+                )
+            },
+        )
     }
 
     LazyColumn(
@@ -236,7 +246,15 @@ fun NewTaskContent(
             ) {
                 Text(text = stringResource(id = R.string.period_of_execution))
 
-                Text(text = state.startDate.toString())
+                Text(
+                    text = if (state.startDate == null) stringResource(id = R.string.choose_a_day)
+                    else state.startDate.format(
+                        DateTimeFormatter.ofPattern(
+                            "EEEE, dd MMMM yyyy, HH:mm",
+                            Locale.getDefault()
+                        )
+                    )
+                )
             }
         }
 

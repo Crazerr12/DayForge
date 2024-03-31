@@ -22,4 +22,7 @@
     <string name="choose_a_time">Choose a time</string>
     <string name="okay">Okay</string>
     <string name="clock_hint">00</string>
+    <string name="all">All</string>
+    <string name="without_category">Without category</string>
+    <string name="choose_a_day">Choose a day</string>
 </resources>

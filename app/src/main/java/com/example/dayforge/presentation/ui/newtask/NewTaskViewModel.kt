@@ -11,7 +11,8 @@ import com.example.domain.usecase.AddTaskUseCase
 import com.example.domain.usecase.GetAllCategoriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
+import java.time.LocalDate
+import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,8 +43,7 @@ class NewTaskViewModel @Inject constructor(
             is NewTaskUiAction.ShowHideDateDialog -> onOpenDateDialog(action.isOpen)
             is NewTaskUiAction.OpenTimeDialog -> onOpenTimeDialog(action.isOpen)
             // TimeDates
-            is NewTaskUiAction.SetDate -> onSetDate(action.date)
-            is NewTaskUiAction.SetTime -> onSetTime(action.time)
+            is NewTaskUiAction.SetDate -> onSetDate(action.date, action.time)
             is NewTaskUiAction.IncompleteCompleteTask -> onCompleteTask(action.task)
         }
     }
@@ -88,22 +88,24 @@ class NewTaskViewModel @Inject constructor(
 
             if (state.category?.id?.toInt() == 0) {
                 addCategoryUseCase.execute(state.category)
-                val category = state.category.copy(id = state.categories.size.toLong())
+                val category = state.category.copy(id = state.categories.size.toLong() + 1)
                 reduceState { it.copy(category = category) }
             }
 
+            val updatedState = uiState.value
+
             addTaskUseCase.execute(
                 Task(
-                    title = state.name,
-                    description = state.description,
-                    startDate = state.startDate?.toLocalDate(),
-                    executionStart = state.startDate?.toLocalTime(),
-                    timeToComplete = state.timeToComplete,
-                    priority = state.priority,
-                    days = state.days,
-                    categoryId = state.category?.id,
-                    isComplete = state.isComplete,
-                    subtasks = state.subtasks
+                    title = updatedState.name,
+                    description = updatedState.description,
+                    startDate = updatedState.startDate,
+                    executionStart = updatedState.startTime,
+                    timeToComplete = updatedState.timeToComplete,
+                    priority = updatedState.priority,
+                    days = updatedState.days,
+                    categoryId = updatedState.category?.id,
+                    isComplete = updatedState.isComplete,
+                    subtasks = updatedState.subtasks
                 )
             )
         }
@@ -134,12 +136,8 @@ class NewTaskViewModel @Inject constructor(
         reduceState { it.copy(timeDialogIsOpen = !isOpen) }
     }
 
-    private fun onSetDate(date: LocalDateTime) {
-        reduceState { it.copy(startDate = date, dateDialogIsOpen = false) }
-    }
-
-    private fun onSetTime(time: LocalDateTime) {
-
+    private fun onSetDate(date: LocalDate, time: LocalTime?) {
+        reduceState { it.copy(startDate = date, startTime = time, dateDialogIsOpen = false) }
     }
 
     private fun onCompleteTask(isComplete: Boolean) {

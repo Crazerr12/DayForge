@@ -7,9 +7,9 @@ import com.example.domain.model.Task
 
 data class TodayState(
     val search: String = "",
-    val todayTasks: List<Task> = emptyList(),
-    val tomorrowTasks: List<Task> = emptyList(),
-    val nextWeekTasks: List<Task> = emptyList(),
+    val todayTasks: List<Task> = mutableStateListOf(),
+    val tomorrowTasks: List<Task> = mutableStateListOf(),
+    val nextWeekTasks: List<Task> = mutableStateListOf(),
     val categories: List<Category> = mutableStateListOf(),
     val selectedTabIndex: Int = 0,
     override val loading: Boolean = false,

@@ -7,6 +7,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 // Set of Material typography styles to start with
+// Display - for the headers, like onBoarding
+// Headline - for the chapters, like section headings
+// Title - for the titles
+// Body - for the main text
+// Label - for the marks, labels
+
 val Typography =
     Typography(
         bodyLarge =

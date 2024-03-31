@@ -105,7 +105,7 @@ fun TodayContent(
                         handleAction(TodayUiAction.LoadTodayTasks)
                     }
 
-                    TaskPage(
+                    TodayTaskPage(
                         tasks = state.todayTasks,
                         categories = state.categories,
                         onTaskClick = onTaskClick,
@@ -118,7 +118,7 @@ fun TodayContent(
                         handleAction(TodayUiAction.LoadTomorrowTasks)
                     }
 
-                    TaskPage(
+                    TodayTaskPage(
                         tasks = state.tomorrowTasks,
                         categories = state.categories,
                         onTaskClick = onTaskClick,
@@ -127,7 +127,7 @@ fun TodayContent(
                 }
 
                 2 -> {
-                    TaskPage(
+                    TodayTaskPage(
                         tasks = state.nextWeekTasks,
                         categories = state.categories,
                         onTaskClick = onTaskClick,
@@ -141,7 +141,7 @@ fun TodayContent(
 }
 
 @Composable
-fun TaskPage(
+fun TodayTaskPage(
     onTaskClick: () -> Unit,
     onCompleteTask: (Int) -> Unit,
     tasks: List<Task>?,
@@ -159,7 +159,7 @@ fun TaskPage(
                 description = task.description,
                 isComplete = task.isComplete,
                 category = categories.firstOrNull { it.id == task.categoryId },
-                startDate = task.startDate,
+                dateStart = task.startDate,
                 timeToComplete = task.timeToComplete,
                 timeStart = null,
                 onClick = onTaskClick,

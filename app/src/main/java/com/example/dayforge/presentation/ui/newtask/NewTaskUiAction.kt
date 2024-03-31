@@ -4,7 +4,8 @@ import com.example.dayforge.presentation.models.UiAction
 import com.example.domain.model.Category
 import com.example.domain.model.Priority
 import com.example.domain.model.Subtask
-import java.time.LocalDateTime
+import java.time.LocalDate
+import java.time.LocalTime
 
 sealed interface NewTaskUiAction : UiAction {
     data object LoadCategories : NewTaskUiAction
@@ -19,7 +20,6 @@ sealed interface NewTaskUiAction : UiAction {
     data object CreateTask : NewTaskUiAction
     data class ShowHideDateDialog(val isOpen: Boolean) : NewTaskUiAction
     data class OpenTimeDialog(val isOpen: Boolean) : NewTaskUiAction
-    data class SetDate(val date: LocalDateTime) : NewTaskUiAction
-    data class SetTime(val time: LocalDateTime) : NewTaskUiAction
+    data class SetDate(val date: LocalDate, val time: LocalTime?) : NewTaskUiAction
     data class IncompleteCompleteTask(val task: Boolean) : NewTaskUiAction
 }

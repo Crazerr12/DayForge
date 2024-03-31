@@ -6,7 +6,7 @@ import com.example.domain.model.Category
 import com.example.domain.model.Priority
 import com.example.domain.model.Subtask
 import java.time.DayOfWeek
-import java.time.LocalDateTime
+import java.time.LocalDate
 import java.time.LocalTime
 
 data class NewTaskState(
@@ -20,7 +20,8 @@ data class NewTaskState(
     val subtasks: MutableList<Subtask> = mutableStateListOf(),
     val repeat: Boolean = false,
     val days: MutableList<DayOfWeek>? = mutableStateListOf(),
-    val startDate: LocalDateTime? = null,
+    val startDate: LocalDate? = null,
+    val startTime: LocalTime? = null,
     val timeToComplete: LocalTime? = null,
     val dateDialogIsOpen: Boolean = false,
     val timeDialogIsOpen: Boolean = false,

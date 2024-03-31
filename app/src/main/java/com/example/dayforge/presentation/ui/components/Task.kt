@@ -30,6 +30,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.dayforge.R
+import com.example.dayforge.presentation.ui.utils.DateFormatterUtil
 import com.example.domain.model.Category
 import com.example.domain.model.Subtask
 import eu.wewox.textflow.TextFlow
@@ -37,7 +38,6 @@ import eu.wewox.textflow.TextFlowObstacleAlignment
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,7 +46,7 @@ fun Task(
     description: String?,
     isComplete: Boolean,
     category: Category?,
-    startDate: LocalDate?,
+    dateStart: LocalDate?,
     timeToComplete: LocalTime?,
     subtasks: List<Subtask>?,
     timeStart: LocalTime?,
@@ -117,7 +117,7 @@ fun Task(
                 }
             }
 
-            if (startDate != null || timeToComplete != null) {
+            if (dateStart != null || timeToComplete != null) {
                 Spacer(modifier = Modifier.height(5.dp))
 
                 Row(
@@ -126,7 +126,7 @@ fun Task(
                         .padding(horizontal = 20.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    if (startDate != null) {
+                    if (dateStart != null) {
                         Icon(
                             painter = painterResource(id = R.drawable.baseline_calendar_month_24),
                             contentDescription = null
@@ -134,23 +134,12 @@ fun Task(
 
                         Spacer(modifier = Modifier.width(10.dp))
 
-                        val startDateTime = startDate.atTime(timeStart ?: LocalTime.MIN)
-                        val pattern =
-                            if (startDate.year == LocalDate.now().year) "d MMMM" else "d MMMM yyyy"
-
-                        val dateFormatter =
-                            if (timeStart == null) {
-                                DateTimeFormatter.ofPattern(pattern, Locale.getDefault())
-                            } else {
-                                DateTimeFormatter.ofPattern("$pattern HH:mm", Locale.getDefault())
-                            }
-
-                        val textTime = startDateTime?.format(dateFormatter)
-                        textTime?.let {
-                            Text(
-                                text = it
+                        Text(
+                            text = DateFormatterUtil.formatDateWithDayOfWeekToYearNumberMonth(
+                                dateStart = dateStart,
+                                timeStart = timeStart
                             )
-                        }
+                        )
 
                         Spacer(modifier = Modifier.weight(1f))
                     }
@@ -189,7 +178,7 @@ private fun TaskPreviewWithLargeTitle() {
         category = Category(1, "Work"),
         timeToComplete = LocalTime.now(),
         timeStart = LocalTime.now(),
-        startDate = LocalDate.now(),
+        dateStart = LocalDate.now(),
         onClick = {},
         onCompleteClick = {},
         subtasks = listOf(Subtask(name = "", isComplete = false))
@@ -206,7 +195,7 @@ private fun TaskPreviewWithSmallTitle() {
         category = Category(1, "Work"),
         timeToComplete = LocalTime.now(),
         timeStart = LocalTime.now(),
-        startDate = LocalDate.now(),
+        dateStart = LocalDate.now(),
         onClick = {},
         onCompleteClick = {},
         subtasks = listOf(Subtask(name = "", isComplete = false))
@@ -223,7 +212,7 @@ private fun TaskPreviewWithoutSubtasks() {
         category = Category(1, "Work"),
         timeToComplete = LocalTime.now(),
         timeStart = LocalTime.now(),
-        startDate = LocalDate.now(),
+        dateStart = LocalDate.now(),
         onClick = {},
         onCompleteClick = {},
         subtasks = emptyList()
@@ -240,7 +229,7 @@ private fun TaskPreviewWithoutTimeStart() {
         category = Category(1, "Work"),
         timeToComplete = LocalTime.now(),
         timeStart = null,
-        startDate = LocalDate.now(),
+        dateStart = LocalDate.now(),
         onClick = {},
         onCompleteClick = {},
         subtasks = listOf(Subtask(name = "", isComplete = false))
@@ -257,7 +246,7 @@ private fun TaskPreviewWithoutStartDate() {
         category = Category(1, "Work"),
         timeToComplete = LocalTime.now(),
         timeStart = LocalTime.now(),
-        startDate = null,
+        dateStart = null,
         onClick = {},
         onCompleteClick = {},
         subtasks = listOf(Subtask(name = "", isComplete = false))
@@ -274,7 +263,7 @@ private fun TaskPreviewWithoutTimeToComplete() {
         category = Category(1, "Work"),
         timeToComplete = null,
         timeStart = LocalTime.now(),
-        startDate = LocalDate.now(),
+        dateStart = LocalDate.now(),
         onClick = {},
         onCompleteClick = {},
         subtasks = listOf(Subtask(name = "", isComplete = false))
@@ -291,7 +280,7 @@ private fun TaskPreviewWithoutTime() {
         category = Category(1, "Work"),
         timeToComplete = null,
         timeStart = null,
-        startDate = null,
+        dateStart = null,
         onClick = {},
         onCompleteClick = {},
         subtasks = listOf(Subtask(name = "", isComplete = false))

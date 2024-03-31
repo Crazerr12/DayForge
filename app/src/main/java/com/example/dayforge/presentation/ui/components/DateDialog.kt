@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -15,6 +17,7 @@ import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,26 +26,29 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.dayforge.R
-import com.example.dayforge.presentation.ui.utils.toMillis
 import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateDialog(
     onDismiss: () -> Unit,
-    onConfirm: (LocalDateTime) -> Unit,
+    onConfirm: (LocalDate, LocalTime?) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var timeDialogIsOpen by remember {
         mutableStateOf(false)
@@ -57,7 +63,8 @@ fun DateDialog(
         DatePickerState(
             locale = Locale.getDefault(),
             yearRange = 2023..2030,
-            initialSelectedDateMillis = dateTime.atStartOfDay().toMillis(),
+            initialSelectedDateMillis = dateTime.atStartOfDay().toInstant(ZoneOffset.UTC)
+                .toEpochMilli(),
             initialDisplayMode = DisplayMode.Picker,
             initialDisplayedMonthMillis = null,
         )
@@ -79,7 +86,7 @@ fun DateDialog(
         Card(
             elevation = CardDefaults.cardElevation(5.dp),
             shape = RoundedCornerShape(15.dp),
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth(0.9f)
                 .border(
                     width = 1.dp,
@@ -87,26 +94,47 @@ fun DateDialog(
                     shape = RoundedCornerShape(15.dp)
                 ),
         ) {
-
             DatePicker(state = datePickerState)
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
-            Text(
+            Row(
                 modifier = Modifier
+                    .padding(horizontal = 10.dp)
                     .fillMaxWidth()
                     .clickable {
                         timeDialogIsOpen = true
                     },
-                text = localTime.value.toString(),
-            )
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.baseline_clock_24),
+                    contentDescription = null
+                )
+
+                Spacer(modifier = Modifier.width(5.dp))
+
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = if (localTime.value == null) stringResource(id = R.string.choose_a_time)
+                    else localTime.value!!.format(DateTimeFormatter.ofPattern("HH:mm")),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
 
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp, end = 6.dp),
+                horizontalArrangement = Arrangement.End,
             ) {
                 Button(onClick = onDismiss) {
-                    Text(text = stringResource(id = R.string.cancel))
+                    Text(
+                        text = stringResource(id = R.string.cancel),
+                    )
                 }
 
                 Button(onClick = {
@@ -115,9 +143,7 @@ fun DateDialog(
                             it
                         ).atZone(ZoneId.systemDefault()).toLocalDate()
                     }
-                    val localDateTime =
-                        localTime.value?.atDate(localDate)
-                    onConfirm(localDateTime ?: localDate!!.atStartOfDay())
+                    onConfirm(localDate!!, localTime.value)
                 }) {
                     Text(text = stringResource(id = R.string.done))
                 }
@@ -129,5 +155,5 @@ fun DateDialog(
 @Preview
 @Composable
 private fun DateDialogPreview() {
-    DateDialog(onDismiss = {}, onConfirm = {})
+    DateDialog(onDismiss = {}, onConfirm = { _, _ -> })
 }
